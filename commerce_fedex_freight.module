@@ -108,7 +108,7 @@ function commerce_fedex_freight_service_rate_order($shipping_service, $order) {
   // all at once. If the first request failed, then they will all fail. If the
   // rates variable is not an array then continue with the request.
   if (!is_array($rates)) {
-    // Include the file that handles SOAP requests.
+    // Include the file that handles REST requests.
     module_load_include('inc', 'commerce_fedex_freight', 'includes/commerce_fedex_freight_rest_client');
     // Create the rate request to submit to FedEx for collecting shipping rates.
     $response = commerce_fedex_freight_create_rate_request($order, $shipping_service);
@@ -118,20 +118,11 @@ function commerce_fedex_freight_service_rate_order($shipping_service, $order) {
       // title tag exist then there is an error in the response and
       // choose amount from bluedog default settings.
       if ($response->title) {
-        $amount = variable_get('bd_shipping_fedex_freight_default_value', 0);
+        $amount = variable_get('commerce_fedex_freight_default_value', 0);
       }
       else {
         $amount = ($response->LTLFuelSurcharge + $response->{'net-freight-charges'} + $response->charges->{'chg-amt'}) - $response->discounts->{'disc-amount'};
         $amount = $amount*variable_get('commerce_fedex_freight_factor');
-      }
-      if ($call_for_appointment) {
-        $amount = $amount + variable_get('bd_shipping_call_for_app_charges', 0);
-      }
-      if ($tailgate_offload) {
-        $amount = $amount + variable_get('bd_shipping_lift_gate_charges', 0);
-      }
-      if (!$home_or_business) {
-        $amount = $amount + variable_get('bd_shipping_fedex_freight_residence', 0);
       }
       if (!empty($amount) && !empty($currency_code)) {
         // Create the shipping service array to return to commerce_shipping.
