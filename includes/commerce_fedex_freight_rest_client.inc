@@ -20,7 +20,7 @@ function commerce_fedex_freight_create_rate_request($order) {
 
   // Load the number of packages and their physical attributes.
   $package_line_items = _commerce_fedex_get_package_items($order, $order_wrapper);
-  //$rate_class = _commerce_fedex_freight_get_rate_class($order, $order_wrapper);
+
   $commerce_customer_shipping = commerce_customer_profile_load($order->commerce_customer_shipping[LANGUAGE_NONE][0]['profile_id']);
   $as_cncntry = $commerce_customer_shipping->commerce_customer_address[LANGUAGE_NONE][0]['country'];
   $as_cnzip = $commerce_customer_shipping->commerce_customer_address[LANGUAGE_NONE][0]['postal_code'];
