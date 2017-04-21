@@ -1,4 +1,5 @@
 <?php
+
 /**
  * @file
  * Defines the FedEx Freight shipping method and services for Drupal Commerce.
@@ -23,7 +24,6 @@ function commerce_fedex_freight_menu() {
 
   return $items;
 }
-
 
 /**
  * Implements hook_commerce_shipping_method_info().
@@ -95,11 +95,6 @@ function commerce_fedex_freight_commerce_shipping_service_rate_options_alter(&$o
  */
 function commerce_fedex_freight_service_rate_order($shipping_service, $order) {
   $commerce_customer_bd_shipping = commerce_customer_profile_load($order->commerce_customer_bd_shipping[LANGUAGE_NONE][0]['profile_id']);
-  $home_or_business = $commerce_customer_bd_shipping->field_home_or_business[LANGUAGE_NONE][0]['value'];
-  $call_for_appointment = $commerce_customer_bd_shipping->field_call_for_appointment[LANGUAGE_NONE][0]['value'];
-  $tailgate_offload = $commerce_customer_bd_shipping->field_tailgate_offload_extra[LANGUAGE_NONE][0]['value'];
-
-  $weight = commerce_physical_order_weight($order, 'lb');
 
   // First attempt to recover cached shipping rates for the current order.
   $rates = commerce_shipping_rates_cache_get('fedex_freight', $order, 0);
@@ -112,10 +107,10 @@ function commerce_fedex_freight_service_rate_order($shipping_service, $order) {
     module_load_include('inc', 'commerce_fedex_freight', 'includes/commerce_fedex_freight_rest_client');
     // Create the rate request to submit to FedEx for collecting shipping rates.
     $response = commerce_fedex_freight_create_rate_request($order, $shipping_service);
-    $name = check_plain('fedex_freight_economy');
+    $name = 'fedex_freight_economy';
     $currency_code = 'USD';
     if (!empty($response)) {
-      // title tag exist then there is an error in the response and
+      // Title tag exist then there is an error in the response and
       // choose amount from bluedog default settings.
       if ($response->title) {
         $amount = variable_get('commerce_fedex_freight_default_value', 0);
@@ -190,4 +185,3 @@ function commerce_fedex_freight_settings_fields() {
     'commerce_fedex_freight_log'
   );
 }
-

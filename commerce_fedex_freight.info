@@ -5,5 +5,3 @@ dependencies[] = commerce
 dependencies[] = commerce_shipping
 dependencies[] = commerce_physical
 core = 7.x
-
-

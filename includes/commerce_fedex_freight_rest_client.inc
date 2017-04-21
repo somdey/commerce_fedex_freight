@@ -97,7 +97,6 @@ function _commerce_fedex_freight_get_rate_class($order, $order_wrapper) {
   $weight = commerce_physical_order_weight($order, 'lb');
   $volume = commerce_physical_order_volume($order, 'in');
   $pcf = $weight['weight'] / $volume['volume'];
-  $rate_class = 50;
 
   foreach ($rate_classes as $density => $class) {
     if ($pcf > (float) $density) {
